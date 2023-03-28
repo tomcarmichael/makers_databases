@@ -6,15 +6,14 @@ require_relative 'lib/album_repository'
 DatabaseConnection.connect('music_library')
 
 # Perform a SQL query on the database and get the result set.
-sql = 'SELECT id, title, release_year FROM albums;'
-result = DatabaseConnection.exec_params(sql, [])
+#sql = 'SELECT id, title, release_year FROM albums;'
+#result = DatabaseConnection.exec_params(sql, [])
 
 # Print out each record from the result set .
 # result.each do |record|
 #   p record
 # end
 
-# repo = AlbumRepository.new
-# albums = repo.all
-# puts albums[0].id
-# puts albums[0].title
+repo = AlbumRepository.new
+albums = repo.find_id(3)
+puts "#{albums[0].title} was released in #{albums[0].release_year}."

@@ -24,12 +24,21 @@ describe AlbumRepository do
     expect(albums[2].release_year).to eq '1974'
   end
 
-  it 'finds a single album' do
+  it 'finds a single album by title' do
     repo = AlbumRepository.new
     album = repo.find('Surfer Rosa')
 
     expect(album.first.artist_id).to eq '1'
     expect(album.first.title).to eq 'Surfer Rosa'
     expect(album.first.release_year).to eq '1988'
+  end
+
+  it 'finds a single album by id' do
+    repo = AlbumRepository.new
+    album = repo.find_id(3)
+
+    expect(album.first.artist_id).to eq '2'
+    expect(album.first.title).to eq 'Waterloo'
+    expect(album.first.release_year).to eq '1974'
   end
 end
