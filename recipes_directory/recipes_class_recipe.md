@@ -1,6 +1,4 @@
-# books Model and Repository Classes Design Recipe
-
-_Copy this recipe template to design and implement Model and Repository classes for a database table._
+# recipes Model and Repository Classes Design Recipe
 
 ## 1. Design and create the Table
 
@@ -13,22 +11,22 @@ Your tests will depend on data stored in PostgreSQL to run.
 If seed data is provided (or you already created it), you can skip this step.
 
 ```sql
--- (file: spec/seeds_books.sql)
+-- (file: spec/seeds_recipes.sql)
 
-TRUNCATE TABLE books RESTART IDENTITY;
+TRUNCATE TABLE recipes RESTART IDENTITY;
 
-INSERT INTO books ("id", "title", "author_name") VALUES
-(1, 'Nineteen Eighty-Four', 'George Orwell'),
-(2, 'Mrs Dalloway', 'Virginia Woolf'),
-(3, 'Emma', 'Jane Austen'),
-(4, 'Dracula', 'Bram Stoker');
+INSERT INTO recipes ("name", "avg_cooking_time", "rating") VALUES
+('Curry', 90, 4),
+('Daal', 60, 3),
+('Salad', 15, 2),
+('Lasagne', 120, 5);
 
 ```
 
 Run this SQL file on the database to truncate (empty) the table, and insert the seed data. Be mindful of the fact any existing records in the table will be deleted.
 
 ```bash
-psql -h 127.0.0.1 book_store_test < seeds_books.sql
+psql -h 127.0.0.1 recipes_directory_test < seeds_recipes.sql
 ```
 
 ## 3. Define the class names
@@ -36,17 +34,16 @@ psql -h 127.0.0.1 book_store_test < seeds_books.sql
 Usually, the Model class name will be the capitalised table name (single instead of plural). The same name is then suffixed by `Repository` for the Repository class name.
 
 ```ruby
-# EXAMPLE
-# Table name: books
+# Table name: recipes
 
-# Model books
-# (in lib/student.rb)
-class Book
+# Model recipes
+# (in lib/recipe.rb)
+class Recipe
 end
 
 # Repository class
-# (in lib/book_repository.rb)
-class BookRepository
+# (in lib/recipe_repository.rb)
+class RecipeRepository
 end
 ```
 
@@ -55,16 +52,15 @@ end
 Define the attributes of your Model class. You can usually map the table columns to the attributes of the class, including primary and foreign keys.
 
 ```ruby
-# EXAMPLE
-# Table name: books
+# Table name: recipes
 
 # Model class
-# (in lib/book.rb)
+# (in lib/recipe.rb)
 
-class Book
+class Recipe
 
   # Replace the attributes by your own columns.
-  attr_accessor :id, :title, :author_name
+  attr_accessor :id, :name, :avg_cooking_time, :rating
 end
 
 ```
@@ -76,30 +72,29 @@ Your Repository class will need to implement methods for each "read" or "write" 
 Using comments, define the method signatures (arguments and return value) and what they do - write up the SQL queries that will be used by each method.
 
 ```ruby
-# EXAMPLE
-# Table name: books
+# Table name: recipes
 
 # Repository class
-# (in lib/book_repository.rb)
+# (in lib/recipe_repository.rb)
 
-class BookRepository
+class RecipeRepository
 
   # Selecting all records
   # No arguments
   def all
     # Executes the SQL query:
-    # SELECT * FROM books;
+    # SELECT * FROM recipes;
 
-    # Returns an array of Book objects.
+    # Returns an array of Recipe objects.
   end
 
   # Gets a single record by its title
-  # One argument: the title (string)
-  def find(title)
+  # One argument: the name (string)
+  def find(name)
     # Executes the SQL query:
-    # SELECT id, title, author_name FROM books WHERE title = $1;
+    # SELECT id, title, author_name FROM recipes WHERE name = $1;
 
-    # Returns an array containing single Book object.
+    # Returns an array containg a single Recipe object.
   end
 end
 ```
@@ -111,35 +106,30 @@ Write Ruby code that defines the expected behaviour of the Repository class, fol
 These examples will later be encoded as RSpec tests.
 
 ```ruby
-# EXAMPLES
-
 # 1
-# Get all books
+# Get all recipes
 
-repo = BookRepository.new
+repo = RecipeRepository.new
 
-books = repo.all
+recipes = repo.all
 
-books.length # =>  2
+recipes.length # =>  4
 
-books[0].id # =>  1
-books[0].title # =>  'Nineteen Eighty-Four'
-books[0].author_name # =>  'George Orwell'
+recipes[0].id # =>  1
+recipes[0].name # =>  'Curry'
+recipes[0].avg_cooking_time # =>  '90'
 
-books[2].id # =>  3
-books[2].title # =>  'Emma'
-books[2].author_name # =>  'Jane Austen'
+recipes[2].id # =>  3
+recipes[2].title # =>  'Salad'
+recipes[2].rating # =>  '2'
 
 # 2
-# Get a single student
-
-# repo = StudentRepository.new
-
-# student = repo.find(1)
-
-# student.id # =>  1
-# student.name # =>  'David'
-# student.cohort_name # =>  'April 2022'
+# Find a single recipe
+repo = RecipeRepository.new
+recipe = repo.find("Lasange")
+recipe.first.id # =>  '4'
+recipe.first.name # =>  'Lasange'
+recipe.first.rating # =>  '5'
 
 # Add more examples for each method
 ```
@@ -153,19 +143,18 @@ Running the SQL code present in the seed file will empty the table and re-insert
 This is so you get a fresh table contents every time you run the test suite.
 
 ```ruby
-# EXAMPLE
 
-# file: spec/student_repository_spec.rb
+# file: spec/recipe_repository_spec.rb
 
-def reset_students_table
-  seed_sql = File.read('spec/seeds_students.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'students' })
+def reset_recipes_table
+  seed_sql = File.read('spec/seeds_recipes.sql')
+  connection = PG.connect({ host: '127.0.0.1', dbname: 'recipes' })
   connection.exec(seed_sql)
 end
 
-describe StudentRepository do
+describe RecipeRepository do
   before(:each) do 
-    reset_students_table
+    reset_recipes_table
   end
 
   # (your tests will go here).
