@@ -78,8 +78,8 @@ end
 # Model post
 # (in lib/post.rb)
 class Post
-  attr_accessor :id, :title, :content, :views, :user_account_id
 
+  attr_accessor :id, :title, :content, :views, :user_account_id
 end
 
 

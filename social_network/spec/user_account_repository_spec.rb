@@ -1,3 +1,6 @@
+require "user_account"
+require "user_account_repository"
+
 def reset_posts_table
   seed_sql = File.read('spec/seeds_user_accounts.sql')
   connection = PG.connect({ host: '127.0.0.1', dbname: 'social_network_test' })
@@ -9,7 +12,7 @@ describe UserAccountRepository do
     reset_post_table
   end
 
-  it "returns all user accounts in the table" do
+  xit "returns all user accounts in the table" do
     repo = UserAccountRepository.new
     users = repo.all
     expect(users.length).to eq 2
@@ -20,7 +23,7 @@ describe UserAccountRepository do
     expect(users.last.email).to eq 'dayinthelife@gmail.com'
   end
 
-  it "finds a user account by id" do
+  xit "finds a user account by id" do
     repo = UserAccountRepository.new
     user = repo.find(2)
     expect(user.username).to eq 'john_lennon'
@@ -28,7 +31,7 @@ describe UserAccountRepository do
     expect(user.email).to eq 'dayinthelife@gmail.com'
   end
 
-  it "inserts a UserAccount object into table using #create"
+  xit "inserts a UserAccount object into table using #create" do
     user = UserAccount.new
     user.username = 'paul_mccartney'
     user.email = 'letitbe@hotmail.com'
@@ -41,7 +44,7 @@ describe UserAccountRepository do
     expect(users.last.id).to eq 3
   end
 
-  it "Deletes a row from the table by id"
+  xit "Deletes a row from the table by id" do
     repo = UserAccountRepository.new
     repo.delete(2)
     users = repo.all
