@@ -59,4 +59,18 @@ class AlbumRepository
     return nil
   end
 
+  def print
+
+    sql = 'SELECT id, title FROM albums;'
+    result_set = DatabaseConnection.exec_params(sql, [])
+
+    fstring = ["Here is the list of albums"] 
+
+    result_set.each do |record|
+      line = " * #{record['id']} - #{record['title']}"
+      fstring << line
+    end
+
+    return fstring
+  end
 end
