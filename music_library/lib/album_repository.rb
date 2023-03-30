@@ -59,7 +59,7 @@ class AlbumRepository
     return nil
   end
 
-  def print
+  def print_all
 
     sql = 'SELECT id, title FROM albums;'
     result_set = DatabaseConnection.exec_params(sql, [])

@@ -1,6 +1,6 @@
 class ArtistRepository
 
-  def print
+  def print_all
 
     sql = 'SELECT name, genre FROM artists;'
     result_set = DatabaseConnection.exec_params(sql, [])

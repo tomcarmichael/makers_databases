@@ -35,9 +35,9 @@ class Application
     choice = choice.to_i
     # @io.puts choice
     if choice == 1
-      @io.puts (@album_repository.print)
+      @io.puts (@album_repository.print_all)
     else
-      @io.puts (@artist_repository.print)
+      @io.puts (@artist_repository.print_all)
     end
     # "Runs" the terminal application
     # so it can ask the user to enter some input

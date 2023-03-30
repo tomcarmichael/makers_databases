@@ -8,7 +8,7 @@ describe Application do
     # Alternate test formulation that tests integration rather than unit:
     # album_repository = AlbumRepository.new
     album_repository = double :AlbumRepository
-    allow(album_repository).to receive(:print).and_return(["Here is the list of albums", " * 2 - Surfer Rosa",
+    allow(album_repository).to receive(:print_all).and_return(["Here is the list of albums", " * 2 - Surfer Rosa",
       " * 4 - Super Trouper", " * 5 - Bossanova", " * ...My Wings", " * 3 - Waterloo",
       " * 1 - Dark Side of the Moon", " * 13 - Mezzanine", " * 14 - Voodoo"])
     application = Application.new('music_library', io, album_repository, ArtistRepository.new)
@@ -25,7 +25,7 @@ describe Application do
     # expect(io).to receive(:puts).with(["Here is the list of albums", " * 2 - Surfer Rosa",
     #   " * 4 - Super Trouper", " * 5 - Bossanova", " * ...My Wings", " * 3 - Waterloo",
     #   " * 1 - Dark Side of the Moon", " * 13 - Mezzanine", " * 14 - Voodoo"]).ordered
-    expect(io).to receive(:puts).with(album_repository.print).ordered
+    expect(io).to receive(:puts).with(album_repository.print_all).ordered
     application.run
   end
 
