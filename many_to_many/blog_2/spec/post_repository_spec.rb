@@ -1,5 +1,4 @@
 require 'post_repository'
-require 'pg'
 
 def reset_posts_tags_tables
   seed_sql = File.read('spec/seeds.sql')
@@ -14,7 +13,7 @@ describe PostRepository do
   
   it "Finds all posts tagged with a given tag" do
     post_repository = PostRepository.new 
-    posts = post_repository.find_by_tag('coding')
+    posts = post_repository.find_by_tag("coding")
     expect(posts.length).to eq 4
     expect(posts.first.title).to eq 'How to use Git'
     expect(posts.last.title).to eq 'SQL basics'
